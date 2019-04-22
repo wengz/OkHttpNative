@@ -3,3 +3,8 @@
 //
 
 #include "HttpClient.h"
+#include "RealCall.h"
+
+Call *HttpClient::newCall(Request * request) {
+    return RealCall::newRealCall(this, request);
+}

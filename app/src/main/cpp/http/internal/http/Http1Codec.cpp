@@ -19,6 +19,7 @@
 #include "../../HttpClient.h"
 #include "../../Dns.h"
 #include "../../Util.h"
+#include "../../Request.h"
 
 
 void Http1Codec::writeSocket (const void * buffer, int length){
@@ -61,8 +62,8 @@ void Http1Codec::writeRequest(const Headers & hds, const string & requestLine) {
     writeSocket("\r\n");
 }
 
-void Http1Codec::writeRequestHeaders(Request & req) {
-    writeRequest(req.getHeaders(), "GET / HTTP/1.1");
+void Http1Codec::writeRequestHeaders(Request * req) {
+    writeRequest(req->getHeaders(), "GET / HTTP/1.1");
 }
 
 void Http1Codec::readResponseHeaders() {
