@@ -35,9 +35,10 @@
 #include <vector>
 
 #include "../../Dns.h"
+#include "../http/Http1Codec.h"
 
 RealConnection::RealConnection(Protocol prot, string host, int port)
-        :protocol(prot), host(host), m_port(port){
+        :protocol(prot), host(host), port(port){
 }
 
 RealConnection::~RealConnection() {
@@ -55,7 +56,7 @@ void RealConnection::connectServer() {
         memset(&server_addr, 0, sizeof(server_addr));
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = inet_addr(server_ip);
-        server_addr.sin_port = htons(m_port);
+        server_addr.sin_port = htons(port);
         socketFd = socket(PF_INET, SOCK_STREAM, 0);
         int con_res = connect(socketFd, (struct sockaddr *) & server_addr, sizeof(server_addr));
         if (con_res == 0){

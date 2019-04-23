@@ -41,7 +41,7 @@ private :
     string host;
 
     //主机端口
-    int m_port;
+    int port;
 };
 
 

@@ -5,8 +5,8 @@
 #ifndef OKHTTPNATIVE_HTTPCLIENT_H
 #define OKHTTPNATIVE_HTTPCLIENT_H
 
-class Call;
-class Request;
+#include "Request.h"
+#include "Call.h"
 
 class HttpClient {
 
@@ -36,7 +36,7 @@ public :
         writeTimeout = b.writeTimeout;
     }
 
-    Call * new_call(Request);
+    Call * newCall(Request * request);
 
 protected :
     int callTimeout;

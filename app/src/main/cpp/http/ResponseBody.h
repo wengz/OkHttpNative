@@ -14,7 +14,7 @@ class ResponseBody {
 public :
     string string();
 
-    ~response_body();
+    ~ResponseBody();
 
 private :
 

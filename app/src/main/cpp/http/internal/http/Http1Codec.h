@@ -27,7 +27,7 @@ public :
 
     Http1Codec(int connectedSocket);
 
-    void writeRequestHeaders(Request & req);
+    void writeRequestHeaders(Request * req);
 
     void readResponseHeaders();
 

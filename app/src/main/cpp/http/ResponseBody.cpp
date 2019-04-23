@@ -4,6 +4,6 @@
 
 #include "ResponseBody.h"
 
-ResponseBody::~response_body() {
+ResponseBody::~ResponseBody(){
 
 }
