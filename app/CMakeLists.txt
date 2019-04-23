@@ -12,8 +12,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 file(GLOB_RECURSE cpp_srcs_h "src/main/cpp/*.h")
 file(GLOB_RECURSE cpp_srcs_cpp "src/main/cpp/*.cpp")
-file(GLOB_RECURSE cpp_srcs_hpp "src/main/cpp/*.hpp")
-set(cpp_srcs ${cpp_srcs_h} ${cpp_srcs_cpp} ${cpp_srcs_hpp})
+set(cpp_srcs ${cpp_srcs_h} ${cpp_srcs_cpp} )
 
 add_library( # Sets the name of the library.
              native-lib
@@ -23,7 +22,7 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              ${cpp_srcs}
-            #src/main/cpp/http/RealCall.cpp
+
 
         )
 

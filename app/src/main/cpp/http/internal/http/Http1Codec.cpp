@@ -68,17 +68,6 @@ void Http1Codec::writeRequestHeaders(Request * req) {
 
 void Http1Codec::readResponseHeaders() {
 
-//    char buf[1024*1024];
-//    memset(buf,0,1024*1024);
-//
-//    int offset = 0;
-//    int rc;
-//    while( (rc = read_line_2(socketFd, buf+offset, 1024) ) > 0 ){
-//        offset += rc;
-//    }
-//    buf[offset] = 0;
-//     __android_log_write(ANDROID_LOG_DEBUG, "NDK response body", buf);
-
     bool transfer_chunked = false;
     int conetent_length = 0;
     while (true){

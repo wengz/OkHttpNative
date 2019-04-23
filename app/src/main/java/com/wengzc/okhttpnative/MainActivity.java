@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testOkHttp();
+               trigerJNI();
             }
         });
     }
@@ -73,4 +73,6 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public native void trigerJNI();
 }
