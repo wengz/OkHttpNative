@@ -4,14 +4,14 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wengzc.okhttpnative"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-frtti -fexceptions"
+                cppFlags ""
             }
         }
     }
@@ -24,6 +24,7 @@ android {
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
+            version "3.10.2"
         }
     }
 }
