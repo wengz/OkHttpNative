@@ -233,6 +233,7 @@ ssize_t Http1Codec::recvPeek(void *buf, size_t len) {
     while (true){
         int ret = recv(socketFd, buf, len, MSG_PEEK);
         if (ret == -1 && errno == EINTR){
+            //fixme 更详细的错误判断，抛出异常?
             continue;
         }
         return ret;
