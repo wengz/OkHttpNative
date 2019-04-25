@@ -20,7 +20,8 @@
 #include "../../Dns.h"
 #include "../../Util.h"
 #include "../../Request.h"
-
+#include "../../Response.h"
+#include "StatusLine.h"
 
 void Http1Codec::writeSocket (const void * buffer, int length){
 
@@ -66,69 +67,88 @@ void Http1Codec::writeRequestHeaders(Request * req) {
     writeRequest(req->getHeaders(), "GET / HTTP/1.1");
 }
 
-void Http1Codec::readResponseHeaders() {
-
-    bool transfer_chunked = false;
-    int conetent_length = 0;
+Headers * Http1Codec::readHeaders() {
+    Headers::Builder hb;
+    string line;
     while (true){
-        string header_line = readHeaderLine();
-        if (header_line.find("chunked") != string::npos ){
-            transfer_chunked = true;
-        }
-
-        if (header_line.find("Content-Length") != string::npos){
-            conetent_length = getContentLength(header_line);
-        }
-
-        __android_log_write(ANDROID_LOG_DEBUG, "NDK response header line", header_line.c_str());
-        int size = header_line.size();
-        if (size <= 2){//header读取结束
+        line = readHeaderLine();
+        if (line.size() <= 2){
             break;
         }
+
+        if (line.find("chunked") != string::npos ){
+            transferChunked = true;
+        }
+
+        if (line.find("Content-Length") != string::npos){
+            responseContentLength = getContentLength(line);
+        }
+
+        hb.addLenient(line);
+    }
+    return hb.build();
+}
+
+
+Response *  Http1Codec::readResponseHeaders(bool expectContinue) {
+
+    //fixme 异常时指针释放
+    StatusLine * statusLine = StatusLine::parse(readLine());
+
+    if (expectContinue && statusLine->code == StatusLine::HTTP_CONTINUE ){
+        return nullptr;
     }
 
-    string content;
-    if (transfer_chunked){//Transfer-Encoding: chunked
+    Response * response = new Response();
+    response->setProtocol(statusLine->protocol);
+    response->setCode(statusLine->code);
+    response->setMessage(statusLine->message);
+    response->setHeaders(readHeaders());
+    delete statusLine;
+
+    return response;
+}
+
+void appendBytes (char * * orgBytes, long orgByteLength, char * addBytes, long addByteLength){
+    long newByteLength = orgByteLength + addByteLength;
+    char * newBytes = static_cast<char *>(malloc(newByteLength));
+    memcpy(newBytes, *orgBytes, orgByteLength);
+    memcpy(newBytes + orgByteLength, addBytes, addByteLength);
+    (* orgBytes) = newBytes;
+    delete [] (* orgBytes);
+    delete [] addBytes;
+}
+
+char *Http1Codec::responseBodyBytes(long *contentLength) {
+    char * buff;
+    long curLength = 0;
+    if (transferChunked){//Transfer-Encoding: chunked
         while (true){
-            string chunked_size_line = readLine();
-            unsigned long chunked_size = hexToDec(chunked_size_line.c_str(), chunked_size_line.size() - 2);
-            //__android_log_write(ANDROID_LOG_DEBUG, "NDK response body chunked size", chunked_size_line.c_str());
-            char * buff = new char[chunked_size+1];
-            int read_count = readn(buff, chunked_size);
-            buff[chunked_size] = '\0';
-            string chunk_body(buff);
-            content.append(chunk_body);
-            if (read_count != chunked_size){
+            string chunkedSizeLine = readLine();
+            unsigned long chunkedSize = hexToDec(chunkedSizeLine.c_str(), chunkedSizeLine.size() - 2);
+            char * chunkBuff = new char[chunkedSize];
+            int readCount = readn(chunkBuff, chunkedSize);
+            appendBytes(&buff, curLength, chunkBuff, readCount);
+            if (readCount != chunkedSize){
                 throw runtime_error("chunked body read content size not match ");
             }
-            // __android_log_write(ANDROID_LOG_DEBUG, "NDK response body chunked", buff);
+            curLength += readCount;
             readLine();//读取块末尾\r\n
-            if (chunked_size == 0){
+            if (chunkedSize == 0){
                 break;
             }
         }
+        *contentLength = curLength;
     }else{
-        char * buff = new char[conetent_length+1];
-        memset(buff, 0, conetent_length);
-        int read_count = readn(buff, conetent_length);
-        buff[conetent_length] = '\0';
-        content = string(buff);
+        buff = new char[responseContentLength];
+        memset(buff, 0, responseContentLength);
+        int readCount = readn(buff, responseContentLength);
+        *contentLength = readCount;
     }
 
-    int size = content.size();
-    //LogUtil::debug(content);
-
-    //string last_100 = content.substr(content.size() -100);
-    //__android_log_write(ANDROID_LOG_DEBUG, "NDK response body chunked", last_100.c_str());
-
-//    int body_size = 0;
-//    char * body_bytes_buff = read_bytes(body_size);
-//    char * body_bytes = new char[body_size+1];
-//    memcpy(body_bytes, body_bytes_buff, body_size);
-//    body_bytes[body_size] = '\0';
-//    __android_log_write(ANDROID_LOG_DEBUG, "NDK response body", body_bytes);
-
+    return buff;
 }
+
 
 string Http1Codec::readHeaderLine() {
     string line = readLine();
@@ -228,20 +248,6 @@ ssize_t Http1Codec::recvPeek(void *buf, size_t len) {
         return ret;
     }
 }
-
-const Headers & Http1Codec::readHeaders() {
-    Headers::Builder hb;
-    string line;
-    while (true){
-        line = readHeaderLine();
-        if (line.size() == 0){
-            break;
-        }
-        hb.addLenient(line);
-    }
-    return hb.build();
-}
-
 
 Http1Codec::Http1Codec() {
 

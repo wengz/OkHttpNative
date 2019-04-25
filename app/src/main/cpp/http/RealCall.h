@@ -10,6 +10,7 @@
 #include "Request.h"
 #include "internal/connection/RealConnection.h"
 
+class Response;
 
 class RealCall :  public Call{
 
@@ -18,7 +19,7 @@ public:
 
     Request * getRequest();
 
-    void execute();
+    Response * execute();
 
     void cancel();
 

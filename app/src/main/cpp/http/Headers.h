@@ -38,7 +38,7 @@ public :
 
         Builder & removeAll (string name);
 
-        Headers build ();
+        Headers * build ();
 
     private :
         vector<string> nameAndValues;
@@ -47,6 +47,8 @@ public :
 
 
     Headers(Builder & builder);
+
+    Headers (){}
 
     Builder & newBuilder  (){
         Builder * res = new Builder;

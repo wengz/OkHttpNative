@@ -72,6 +72,6 @@ Headers::Builder & Headers::Builder::addLenient (string name, string value){
     return *this;
 }
 
-Headers Headers::Builder::build() {
-    return Headers(*this);
+Headers * Headers::Builder::build() {
+    return new Headers(*this);
 }

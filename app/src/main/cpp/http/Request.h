@@ -9,8 +9,7 @@
 
 #include "Headers.h"
 #include "HttpUrl.h"
-
-class RequestBody;
+#include "RequestBody.h"
 
 using namespace std;
 
@@ -23,17 +22,21 @@ public :
 
     public :
         Builder();
-        Builder & setUrl (HttpUrl * url);
+        Builder & setUrl (HttpUrl url);
         Builder & setUrl (string & url);
         Request build();
         Headers::Builder & getHeaders();
-        HttpUrl * getUrl();
+        HttpUrl getUrl();
+
+        Builder & post(RequestBody * rb);
+
+        Builder & setMethod(string method, RequestBody * rb);
 
     private :
         string method;
         Headers::Builder headers;
         RequestBody * body;
-        HttpUrl * url;
+        HttpUrl url;
     };
     //--end--内部类构造器
 
@@ -44,14 +47,12 @@ public :
 
     Headers & getHeaders();
 
-    HttpUrl * getUrl();
+    HttpUrl getUrl();
 
 private :
     std::string method;
-    HttpUrl * url;
+    HttpUrl url;
     Headers headers;
-
-
 
 };
 

@@ -16,6 +16,7 @@
 class Call;
 class Request;
 class HttpClient;
+class Response;
 
 class Http1Codec {
 
@@ -29,7 +30,7 @@ public :
 
     void writeRequestHeaders(Request * req);
 
-    void readResponseHeaders();
+    Response * readResponseHeaders(bool expectContinue);
 
     void openResponseBody();
 
@@ -39,10 +40,14 @@ public :
 
     int readn(void * vptr, size_t n);
 
+    char * responseBodyBytes (long * contentLength);
+
 private :
 
     int socketFd;
+
     HttpClient  * client;
+
     Call * call;
 
     void writeSocket (const void * buffer, int length);
@@ -51,17 +56,23 @@ private :
 
     string readHeaderLine();
 
-    const Headers & readHeaders();
-
     ssize_t recvPeek (void * buf, size_t len);
 
     string readLine();
 
     size_t readLine2(int fd, void *vptr, size_t maxlen);
-    
-    
-    
 
+    Headers * readHeaders ();
+
+    /**
+     * http回应体长度
+     */
+    long responseContentLength;
+
+    /**
+     * http回应分段接收
+     */
+    bool transferChunked;
 };
 
 

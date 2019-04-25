@@ -7,17 +7,25 @@
 
 #include <string>
 
+class Http1Codec;
+
 using namespace std;
 
 class ResponseBody {
 
 public :
-    string string();
+
+    ResponseBody (Http1Codec * http1Codec):http1Codec(http1Codec){
+
+    };
+
+    virtual char * bytes(long * contentLength);
 
     ~ResponseBody();
 
 private :
 
+    Http1Codec * http1Codec;
 };
 
 

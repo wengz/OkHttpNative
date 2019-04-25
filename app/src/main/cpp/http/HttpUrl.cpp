@@ -314,7 +314,7 @@ bool HttpUrl::percentEncoded(const string &s, int pos, int limit) {
            && decodeHexDigit(s[pos+2]) != -1;
 }
 
-HttpUrl * HttpUrl::get(string &url) {
+HttpUrl HttpUrl::get(string &url) {
     return Builder().parse(url).build();
 }
 
@@ -530,8 +530,8 @@ HttpUrl::Builder & HttpUrl::Builder::parse(string input) {
     return * this;
 }
 
-HttpUrl * HttpUrl::Builder::build() {
-    return new HttpUrl(* this);
+HttpUrl HttpUrl::Builder::build() {
+    return  HttpUrl(* this);
 }
 
 string HttpUrl::Builder::getHost() {

@@ -4,6 +4,7 @@
 
 #include "RealCall.h"
 #include "internal/http/Http1Codec.h"
+#include "Response.h"
 
 RealCall *  RealCall::newRealCall(HttpClient * client, Request * req){
     return new RealCall(client, req);
@@ -13,12 +14,17 @@ Request * RealCall::getRequest() {
     return originRequest;
 }
 
-void RealCall::execute(){
+Response * RealCall::execute(){
     connection->connectServer();
     codec = connection->newStream();
     codec->writeRequestHeaders(originRequest);
-    codec->readResponseHeaders();
-    releaseResource();
+    Response * response = nullptr;
+
+    if (response == nullptr){
+        response = codec->readResponseHeaders(false);
+    }
+    response->setResponseBody(new ResponseBody(codec));
+    return response;
 }
 
 void RealCall::cancel() {
@@ -27,7 +33,7 @@ void RealCall::cancel() {
 
 RealCall::RealCall(HttpClient *client, Request *req)
         :client(client), originRequest(req){
-    connection = new RealConnection(http_1_1, req->getUrl()->getHost(), req->getUrl()->getPort());
+    connection = new RealConnection(http_1_1, req->getUrl().getHost(), req->getUrl().getPort());
 }
 
 
@@ -37,6 +43,6 @@ void RealCall::releaseResource() {
 }
 
 RealCall::~RealCall() {
-
+    releaseResource();
 };
 

@@ -6,13 +6,15 @@
 #define OKHTTPNATIVE_CALL_H
 
 class Request;
+class Response;
+
 
 class Call {
 
 public :
     virtual Request * getRequest() = 0;
 
-    virtual void execute() = 0;
+    virtual Response * execute() = 0;
 
     virtual void cancel() = 0;
 

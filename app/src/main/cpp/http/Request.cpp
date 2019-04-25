@@ -16,7 +16,7 @@ Request::Request(Request::Builder & builder)
         : headers(builder.getHeaders()), url(builder.getUrl()){
 }
 
-HttpUrl * Request::getUrl() {
+HttpUrl Request::getUrl() {
     return url;
 }
 
@@ -31,14 +31,14 @@ Request::Builder::Builder() {
     //headers.add("Accept-Encoding", "gzip");
 }
 
-Request::Builder & Request::Builder::setUrl(HttpUrl * urlArg) {
+Request::Builder & Request::Builder::setUrl(HttpUrl urlArg) {
     url = urlArg;
-    headers.add("Host", urlArg->getHost());
+    headers.add("Host", urlArg.getHost());
     return * this;
 }
 
 Request::Builder &Request::Builder::setUrl(string &url) {
-    HttpUrl * retUrl = HttpUrl::get(url);
+    HttpUrl retUrl = HttpUrl::get(url);
     return setUrl(retUrl);
 }
 
@@ -46,6 +46,16 @@ Headers::Builder &Request::Builder::getHeaders() {
     return headers;
 }
 
-HttpUrl *Request::Builder::getUrl() {
+HttpUrl Request::Builder::getUrl() {
     return url;
+}
+
+Request::Builder &Request::Builder::post(RequestBody *rb) {
+    return setMethod("post", rb);
+}
+
+Request::Builder &Request::Builder::setMethod(string method, RequestBody *rb) {
+    this->method = method;
+    this->body = rb;
+    return * this;
 }

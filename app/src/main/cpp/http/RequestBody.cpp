@@ -6,23 +6,23 @@
 
 #include <cstring>
 
-RequestBody RequestBody::create(const MediaType &contentType, char * content, int offset, int byteCount) {
+RequestBody RequestBody::create(const MediaType &contentType, const char * content, int offset, int byteCount) {
     return RequestBody(contentType, content, offset, byteCount);
 }
 
 MediaType RequestBody::getContentType() {
-    //return MediaType();
+    return contentType;
 }
 
 long RequestBody::getContentLength() {
-    return 0;
+    return contentLength;
 }
 
 void RequestBody::writeTo(void *target) {
 
 }
 
-RequestBody::RequestBody(const MediaType &contentType, char *content, int offset, int byteCount)
+RequestBody::RequestBody(const MediaType &contentType, const char *content, int offset, int byteCount)
     :contentType(contentType), contentLength(byteCount){
     this->content = static_cast<char *>(malloc(byteCount));
     memcpy(this->content, content+offset, byteCount);
@@ -30,4 +30,9 @@ RequestBody::RequestBody(const MediaType &contentType, char *content, int offset
 
 RequestBody::~RequestBody() {
     delete [] this->content;
+}
+
+void RequestBody::print() const {
+    //string tempContent(content);
+    //LogUtil::debug(tempContent);
 }

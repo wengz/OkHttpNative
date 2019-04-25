@@ -20,7 +20,7 @@ public :
 
     public :
         Builder();
-        HttpUrl * build();
+        HttpUrl build();
         Builder & setScheme(string scheme);
         Builder & setUsername(string username);
         Builder & setEncodedUsername(string encodedUserName);
@@ -66,7 +66,7 @@ public :
     static int codePointEndIndex(const string & s, int startIndex);
     static int codePoint(const string & s, int startIndex, int endIndex);
     static bool percentEncoded(const string & s, int pos, int limit);
-    static HttpUrl * get(string & url);
+    static HttpUrl get(string & url);
     static string percentDecode(string & input, int pos, int limit, bool plusIsSpace);
 
     HttpUrl();

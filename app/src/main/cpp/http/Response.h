@@ -5,8 +5,14 @@
 #ifndef OKHTTPNATIVE_RESPONSE_H
 #define OKHTTPNATIVE_RESPONSE_H
 
+#include <string>
+
 #include "ResponseBody.h"
 #include "Headers.h"
+#include "Protocol.h"
+#include "Headers.h"
+
+class Request;
 
 class Response {
 
@@ -51,11 +57,27 @@ public :
 
     }
 
-    ResponseBody & body();
+    Response & setProtocol(Protocol  protocol);
+
+    Response & setCode(int code);
+
+    Response & setMessage(string msg);
+
+    Response & setHeaders(Headers * headers);
+
+    Response & setResponseBody(ResponseBody * responseBody);
+
+    ResponseBody * getResponseBody(){
+        return this->responseBody;
+    };
 
 private :
+    Request * request;
+    Protocol protocol;
     int code;
-
+    std::string message;
+    Headers * headers;
+    ResponseBody * responseBody;
 };
 
 

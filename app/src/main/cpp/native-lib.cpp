@@ -5,6 +5,8 @@
 
 #include "http/HttpClient.h"
 #include "http/MediaType.h"
+#include "http/RequestBody.h"
+#include "http/Response.h"
 
 using namespace std;
 
@@ -12,7 +14,9 @@ void testOkHttpNative (){
     HttpClient client;
     string url("http://www.baidu.com");
     Request request = Request::Builder().setUrl(url).build();
-    client.newCall(&request)->execute();
+    Response  * response = client.newCall(&request)->execute();
+    long contentLength;
+    char * content = response->getResponseBody()->bytes(&contentLength);
 }
 
 extern "C" JNIEXPORT jstring
@@ -50,7 +54,10 @@ void testMediaType (){
 }
 
 void testFun (){
-
+    MediaType resType = MediaType::get("text/plain; charset=us-ascii");
+    string fakeContent("fake content");
+    RequestBody rqb = RequestBody::create(resType, fakeContent.c_str(), 0, fakeContent.size()+1);
+    rqb.print();
 }
 
 extern "C" JNIEXPORT void
@@ -59,6 +66,6 @@ Java_com_wengzc_okhttpnative_MainActivity_trigerJNI(
         JNIEnv *env,
         jobject /* this */) {
 
-    testFun();
+    testOkHttpNative();
 }
 

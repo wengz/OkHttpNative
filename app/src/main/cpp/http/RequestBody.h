@@ -6,12 +6,14 @@
 #define OKHTTPNATIVE_REQUESTBODY_H
 
 #include "MediaType.h"
+#include "../log/LogUtil.h"
+
 
 class RequestBody {
 
 public :
 
-    static RequestBody create(const MediaType & contentType, char * content, int offset, int byteCount );
+    static RequestBody create(const MediaType & contentType, const char * content, int offset, int byteCount );
 
     virtual MediaType getContentType();
 
@@ -19,13 +21,17 @@ public :
 
     virtual void writeTo(void * target);
 
+    virtual void print() const;
+
+    RequestBody(const MediaType & contentType, const char * content, int offset, int byteCount);
+
+    virtual ~RequestBody();
+
 private :
-    RequestBody(const MediaType & contentType, char * content, int offset, int byteCount);
+
     MediaType contentType;
     char * content;
     int contentLength;
-
-    virtual ~RequestBody();
 };
 
 
