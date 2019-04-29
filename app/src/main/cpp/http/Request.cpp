@@ -13,11 +13,15 @@ Headers & Request::getHeaders() {
 }
 
 Request::Request(Request::Builder & builder)
-        : headers(builder.getHeaders()), url(builder.getUrl()){
+        : headers(builder.getHeaders()), url(builder.getUrl()) , method(builder.getMethod()), body(builder.getBody()){
 }
 
 HttpUrl Request::getUrl() {
     return url;
+}
+
+RequestBody *Request::getBody() {
+    return body;
 }
 
 
@@ -57,5 +61,16 @@ Request::Builder &Request::Builder::post(RequestBody *rb) {
 Request::Builder &Request::Builder::setMethod(string method, RequestBody *rb) {
     this->method = method;
     this->body = rb;
+    headers.add("content-type", "text/plain");
+    headers.add("content-length", "3");
     return * this;
 }
+
+string Request::Builder::getMethod() {
+    return method;
+}
+
+RequestBody *Request::Builder::getBody() {
+    return body;
+}
+

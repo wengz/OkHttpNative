@@ -3,6 +3,7 @@
 //
 
 #include "RequestBody.h"
+#include "internal/http/Http1Codec.h"
 
 #include <cstring>
 
@@ -19,6 +20,8 @@ long RequestBody::getContentLength() {
 }
 
 void RequestBody::writeTo(void *target) {
+    Http1Codec * codec = static_cast<Http1Codec *>(target);
+    codec->writeSocket(content, getContentLength());
 
 }
 

@@ -5,6 +5,7 @@
 #include "RealCall.h"
 #include "internal/http/Http1Codec.h"
 #include "Response.h"
+#include "internal/http/HttpMethod.h"
 
 RealCall *  RealCall::newRealCall(HttpClient * client, Request * req){
     return new RealCall(client, req);
@@ -19,6 +20,10 @@ Response * RealCall::execute(){
     codec = connection->newStream();
     codec->writeRequestHeaders(originRequest);
     Response * response = nullptr;
+
+    if (HttpMethod::permitsRequestBody(originRequest->getMethod()) && originRequest->getBody() != nullptr ){
+        originRequest->getBody()->writeTo(codec);
+    }
 
     if (response == nullptr){
         response = codec->readResponseHeaders(false);

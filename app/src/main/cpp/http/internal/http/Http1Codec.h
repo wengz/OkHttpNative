@@ -42,6 +42,10 @@ public :
 
     char * responseBodyBytes (long * contentLength);
 
+    void writeSocket (const void * buffer, int length);
+
+    void writeSocket (const string & str);
+
 private :
 
     int socketFd;
@@ -49,10 +53,6 @@ private :
     HttpClient  * client;
 
     Call * call;
-
-    void writeSocket (const void * buffer, int length);
-
-    void writeSocket (const string & str);
 
     string readHeaderLine();
 

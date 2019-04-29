@@ -319,9 +319,14 @@ HttpUrl HttpUrl::get(string &url) {
 }
 
 HttpUrl::HttpUrl(HttpUrl::Builder & bd) {
-    host = bd.getHost();
-    port = bd.effectivePort();
-    scheme = bd.getScheme();
+//    host = bd.getHost();
+//    port = bd.effectivePort();
+//    scheme = bd.getScheme();
+
+    host = "10.112.19.17";
+    port = 8080;
+    scheme = "http";
+
 }
 
 HttpUrl::HttpUrl() {

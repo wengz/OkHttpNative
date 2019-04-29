@@ -32,11 +32,16 @@ public :
 
         Builder & setMethod(string method, RequestBody * rb);
 
+        string getMethod();
+
+        RequestBody * getBody();
+
     private :
         string method;
+        HttpUrl url;
         Headers::Builder headers;
         RequestBody * body;
-        HttpUrl url;
+
     };
     //--end--内部类构造器
 
@@ -49,10 +54,13 @@ public :
 
     HttpUrl getUrl();
 
+    RequestBody * getBody();
+
 private :
     std::string method;
     HttpUrl url;
     Headers headers;
+    RequestBody * body;
 
 };
 

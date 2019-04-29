@@ -64,7 +64,7 @@ void Http1Codec::writeRequest(const Headers & hds, const string & requestLine) {
 }
 
 void Http1Codec::writeRequestHeaders(Request * req) {
-    writeRequest(req->getHeaders(), "GET / HTTP/1.1");
+    writeRequest(req->getHeaders(), "POST /testpost HTTP/1.1");
 }
 
 Headers * Http1Codec::readHeaders() {
@@ -249,7 +249,7 @@ ssize_t Http1Codec::recvPeek(void *buf, size_t len) {
     }
 }
 
-Http1Codec::Http1Codec() {
+Http1Codec::Http1Codec():transferChunked(false) {
 
 }
 
@@ -263,7 +263,7 @@ Http1Codec::Http1Codec(Call *arg_call) {
     call = arg_call;
 }
 
-Http1Codec::Http1Codec(int connectedSocket) {
+Http1Codec::Http1Codec(int connectedSocket):transferChunked(false) {
     socketFd = connectedSocket;
 }
 

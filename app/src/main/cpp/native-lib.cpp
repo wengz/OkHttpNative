@@ -12,11 +12,25 @@ using namespace std;
 
 void testOkHttpNative (){
     HttpClient client;
-    string url("http://www.baidu.com");
+    string url("http://10.112.19.17:8080");
     Request request = Request::Builder().setUrl(url).build();
     Response  * response = client.newCall(&request)->execute();
     long contentLength;
     char * content = response->getResponseBody()->bytes(&contentLength);
+    delete content;
+}
+
+void testPost (){
+    MediaType mediaType = MediaType::get("application/json; charset=utf-8");
+    HttpClient client;
+    char * reqBodyContent = "abc";
+    RequestBody requetBody = RequestBody::create(mediaType, reqBodyContent, 0, 3);
+    string url("http://10.112.19.17:8080");
+    Request request = Request::Builder().setUrl(url).post(&requetBody).build();
+    Response  * response = client.newCall(&request)->execute();
+    long contentLength;
+    char * content = response->getResponseBody()->bytes(&contentLength);
+    delete content;
 }
 
 extern "C" JNIEXPORT jstring
@@ -66,6 +80,7 @@ Java_com_wengzc_okhttpnative_MainActivity_trigerJNI(
         JNIEnv *env,
         jobject /* this */) {
 
-    testOkHttpNative();
+    //testPost();
+    testPost();
 }
 
