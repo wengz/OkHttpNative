@@ -74,13 +74,35 @@ void testFun (){
     rqb.print();
 }
 
+
+void testPtr (){
+//    unique_ptr<string> uPtr(new string("ooxx"));
+//    LogUtil::debug(*uPtr);
+//    unique_ptr<string> uPtr2 = std::move(uPtr);
+//    LogUtil::debug(*uPtr2);
+
+    shared_ptr<string> sPtr(new string("this is shared ptr content   "));
+    LogUtil::debug(*sPtr);
+    shared_ptr<string> sPtr2 = sPtr;
+    LogUtil::debug(*sPtr2);
+    LogUtil::debug(*sPtr);
+}
+
+void testHttpUrl (){
+    //string raw("abc\tabc abc我abc");
+    //string newStr = HttpUrl::canonicalize(raw, 0, raw.size(), string(), false, true, true, true);
+
+
+    string raw("abc%e4%bd%a0%e5%a5%bd+abc");
+    string result = HttpUrl::percentDecode(raw, 0, raw.size(), true);
+
+}
+
 extern "C" JNIEXPORT void
 JNICALL
 Java_com_wengzc_okhttpnative_MainActivity_trigerJNI(
         JNIEnv *env,
         jobject /* this */) {
-
-    //testPost();
-    testPost();
+    testHttpUrl();
 }
 

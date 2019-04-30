@@ -21,7 +21,7 @@ string strToLower(string str);
 
 string strToUpper(string str);
 
-bool compareNoCase(string str_a, string str_b);
+bool compareIgnoreCase(string str_a, string str_b);
 
 int decodeHexDigit(char c);
 
@@ -34,5 +34,9 @@ bool regionMatches(const string & s1, const string & s2, bool ignore_case, int o
 string hostHeader(HttpUrl & url, bool include_default_port);
 
 int getContentLength(string line);
+
+int decodeHexDeigit (char c);
+
+string utilCanonicalizeHost (string host);
 
 #endif //OKHTTPNATIVE_UTIL_H

@@ -59,7 +59,7 @@ string strToUpper(string str) {
     return strTmp;
 }
 
-bool compareNoCase(string str_a, string str_b) {
+bool compareIgnoreCase(string str_a, string str_b) {
     string str1 = strToLower(str_a);
     string str2 = strToLower(str_b);
     return (str1 == str2);
@@ -149,4 +149,31 @@ int getContentLength(string line) {
     string length_str = line.substr(start_index, end_index - start_index);
     int res = atoi(length_str.c_str());
     return res;
+}
+
+int decodeHexDeigit(char c) {
+    if (c >= '0' && c <= '9'){
+        return c - '0';
+    }
+    if (c >= 'a' && c <= 'f'){
+        return c - 'a' + 10;
+    }
+    if (c >= 'A' && c <= 'F'){
+        return c - 'A' + 10;
+    }
+    return -1;
+}
+
+string utilCanonicalizeHost(string host) {
+
+    /**
+     * todo
+     *
+     * ipv6
+     *
+     * java IDN.toASCII 转化域名中非ascii字符
+     *
+     */
+    string result = strToLower(host);
+    return result;
 }
