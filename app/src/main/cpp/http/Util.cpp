@@ -38,6 +38,10 @@ string & trim( string & s){
     return s;
 }
 
+/**
+   * Returns the index of the first character in {@code input} that contains a character in {@code
+   * delimiters}. Returns limit if there is no such character.
+   */
 int delimiterOffset (string input, int pos, int limit, string delimiters){
     for (int i = pos; i < limit; i++){
         if (delimiters.find(input[i]) != string::npos ){

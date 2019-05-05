@@ -17,34 +17,7 @@ class Request {
 
 public :
 
-    //内部类构造器
-    class Builder {
-
-    public :
-        Builder();
-        Builder & setUrl (HttpUrl url);
-        Builder & setUrl (string & url);
-        Request build();
-        Headers::Builder & getHeaders();
-        HttpUrl getUrl();
-
-        Builder & post(RequestBody * rb);
-
-        Builder & setMethod(string method, RequestBody * rb);
-
-        string getMethod();
-
-        RequestBody * getBody();
-
-    private :
-        string method;
-        HttpUrl url;
-        Headers::Builder headers;
-        RequestBody * body;
-
-    };
-    //--end--内部类构造器
-
+    class Builder;
 
     Request(Builder & builder);
 
