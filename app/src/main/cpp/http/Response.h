@@ -12,7 +12,6 @@
 #include "Protocol.h"
 #include "Headers.h"
 
-class Request;
 
 class Response {
 
@@ -39,7 +38,7 @@ public :
         }
 
         Builder & setHeaders (Headers & hds){
-            (*this).headers = hds.newBuilder();
+            this->headers = * hds.newBuilder();
             return * this;
         }
 
@@ -61,23 +60,22 @@ public :
 
     Response & setCode(int code);
 
-    Response & setMessage(string msg);
+    Response & setMessage(string & msg);
 
-    Response & setHeaders(Headers * headers);
+    Response & setHeaders(Headers & headers);
 
     Response & setResponseBody(ResponseBody * responseBody);
 
-    ResponseBody * getResponseBody(){
+    shared_ptr<ResponseBody> getResponseBody(){
         return this->responseBody;
     };
 
 private :
-    Request * request;
     Protocol protocol;
     int code;
     std::string message;
-    Headers * headers;
-    ResponseBody * responseBody;
+    Headers headers;
+    shared_ptr<ResponseBody> responseBody;
 };
 
 

@@ -12,25 +12,25 @@ class Request::Builder {
 
 public :
     Builder();
-    Builder & setUrl (HttpUrl url);
+    Builder & setUrl (HttpUrl & url);
     Builder & setUrl (string & url);
     Request build();
     Headers::Builder & getHeaders();
     HttpUrl getUrl();
 
-    Builder & post(RequestBody * rb);
+    Builder & post(RequestBody &rb);
 
-    Builder & setMethod(string method, RequestBody * rb);
+    Builder & setMethod(string method, RequestBody & rb);
 
     string getMethod();
 
-    RequestBody * getBody();
+    RequestBody getBody();
 
 private :
     string method;
     HttpUrl url;
     Headers::Builder headers;
-    RequestBody * body;
+    RequestBody body;
 
 };
 

@@ -12,6 +12,7 @@
 
 #include "../../Headers.h"
 #include "../../Response.h"
+#include "../connection/RealConnection.h"
 
 class Call;
 class Request;
@@ -24,15 +25,11 @@ public :
 
     Http1Codec ();
 
-    Http1Codec(Call * call);
+    Http1Codec(shared_ptr<RealConnection> connection);
 
-    Http1Codec(int connectedSocket);
-
-    void writeRequestHeaders(Request * req);
+    void writeRequestHeaders(Request & req);
 
     Response * readResponseHeaders(bool expectContinue);
-
-    void openResponseBody();
 
     void writeRequest(const Headers & hds, const string & requestLine);
 
@@ -42,27 +39,18 @@ public :
 
     char * responseBodyBytes (long * contentLength);
 
-    void writeSocket (const void * buffer, int length);
+    void writeSocket (const void * buffer, int length) const;
 
     void writeSocket (const string & str);
 
 private :
 
-    int socketFd;
-
-    HttpClient  * client;
-
-    Call * call;
-
-    string readHeaderLine();
-
-    ssize_t recvPeek (void * buf, size_t len);
-
-    string readLine();
-
-    size_t readLine2(int fd, void *vptr, size_t maxlen);
-
     Headers * readHeaders ();
+
+    /**
+     * 网络连接
+     */
+    shared_ptr<RealConnection> connection;
 
     /**
      * http回应体长度
@@ -73,6 +61,13 @@ private :
      * http回应分段接收
      */
     bool transferChunked;
+
+    string readHeaderLine();
+
+    ssize_t recvPeek (void * buf, size_t len);
+
+    string readLine();
+
 };
 
 

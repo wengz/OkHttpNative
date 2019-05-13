@@ -3,6 +3,7 @@
 //
 
 #include "Response.h"
+#include <memory>
 
 Response & Response::setProtocol(Protocol protocol) {
     this->protocol = protocol;
@@ -14,17 +15,17 @@ Response & Response::setCode(int code) {
     return * this;
 }
 
-Response & Response::setMessage(string msg) {
+Response & Response::setMessage(string & msg) {
     this->message = msg;
     return *this;
 }
 
-Response & Response::setHeaders(Headers *headers) {
+Response & Response::setHeaders(Headers &headers) {
     this->headers = headers;
     return *this;
 }
 
 Response &Response::setResponseBody(ResponseBody *responseBody) {
-    this->responseBody = responseBody;
+    this->responseBody = shared_ptr<ResponseBody>(responseBody);
     return *this;
 }

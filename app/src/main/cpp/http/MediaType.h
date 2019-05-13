@@ -30,6 +30,9 @@ public :
 
     string getCharset(string & defaultValue) const;
 
+    MediaType();
+    MediaType (string & mediaType, string &type, string &subtype, string &charset);
+
 private :
     static const string TOKEN;
     static const string QUOTED;
@@ -37,13 +40,10 @@ private :
     static const regex TYPE_SUBTYPE;
     static const regex PARAMETER;
 
-    const string mediaType;
-    const string type;
-    const string subtype;
-    const string charset;
-
-    MediaType();
-    MediaType (string & mediaType, string &type, string &subtype, string &charset);
+     string mediaType;
+     string type;
+     string subtype;
+     string charset;
 };
 
 

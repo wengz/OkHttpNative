@@ -26,6 +26,22 @@ Headers::Headers(Builder & builder) {
     }
 }
 
+Headers::Headers(const Headers &rhs): nameAndValuesSize(rhs.nameAndValuesSize) {
+    nameAndValues = new string[nameAndValuesSize];
+    memcpy(nameAndValues, rhs.nameAndValues, sizeof(string)*nameAndValuesSize);
+}
+
+Headers &Headers::operator=(const Headers &rhs) {
+    nameAndValuesSize = rhs.nameAndValuesSize;
+    nameAndValues = new string[nameAndValuesSize];
+    memcpy(nameAndValues, rhs.nameAndValues, sizeof(string)*nameAndValuesSize);
+    return * this;
+}
+
+Headers::~Headers() {
+    delete[] nameAndValues;
+}
+
 Headers::Builder & Headers::Builder::add (string name, string value){
     checkName(name);
     checkValue(value, name);

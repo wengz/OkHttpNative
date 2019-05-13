@@ -70,6 +70,6 @@ int RealConnection::connectedSocket() {
     return socketFd;
 }
 
-Http1Codec * RealConnection::newStream() {
-    return new Http1Codec(socketFd);
+Http1Codec * RealConnection::newStream(shared_ptr<RealConnection> connection) {
+    return new Http1Codec(connection);
 }

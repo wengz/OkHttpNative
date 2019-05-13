@@ -8,12 +8,13 @@
 #include <string>
 
 #include "../../Protocol.h"
+#include "../../core/Uncopyable.h"
 
 using namespace std;
 
 class Http1Codec;
 
-class RealConnection {
+class RealConnection : private Uncopyable{
 
 public :
 
@@ -25,10 +26,10 @@ public :
     //已经连接的socket描述符
     int connectedSocket();
 
-    //在本连接上创建流编解码工具
-    Http1Codec * newStream();
-
     virtual ~RealConnection();
+
+    //在连接上创建流编解码工具
+    static Http1Codec * newStream(shared_ptr<RealConnection> connection);
 
 private :
     //socket 描述符

@@ -651,5 +651,9 @@ HttpUrl HttpUrl::parse(string &url) {
     return get(url);
 }
 
+HttpUrl::HttpUrl() {
+
+}
+
 
 

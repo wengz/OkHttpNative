@@ -5,6 +5,6 @@
 #include "HttpClient.h"
 #include "RealCall.h"
 
-Call *HttpClient::newCall(Request * request) {
-    return RealCall::newRealCall(this, request);
+Call * HttpClient::newCall(shared_ptr<HttpClient> client, Request request) {
+    return RealCall::newRealCall(client, request);
 }

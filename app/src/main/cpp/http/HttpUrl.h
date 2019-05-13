@@ -17,6 +17,8 @@ public :
 
     class Builder;
 
+    HttpUrl();
+
 /**
    * Returns 80 if {@code scheme.equals("http")}, 443 if {@code scheme.equals("https")} and -1
    * otherwise.
@@ -428,6 +430,7 @@ private :
 
     /** Canonical URL. */
     string url;
+
 };
 
 

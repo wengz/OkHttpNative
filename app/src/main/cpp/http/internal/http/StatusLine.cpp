@@ -8,12 +8,12 @@ const int StatusLine::HTTP_TEMP_REDIRECT = 307;
 const int StatusLine::HTTP_PERM_REDIRECT = 308;
 const int StatusLine::HTTP_CONTINUE = 100;
 
-StatusLine::StatusLine(Protocol protocol, int code, std::string message)
+StatusLine::StatusLine(Protocol protocol, int code, std::string & message)
     :protocol(protocol), code(code), message(message){
 
 }
 
-StatusLine * StatusLine::parse(string statusLine) throw (runtime_error){
+StatusLine StatusLine::parse(const string & statusLine) throw (runtime_error){
     // H T T P / 1 . 1   2 0 0   T e m p o r a r y   R e d i r e c t
     // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0
 
@@ -59,5 +59,5 @@ StatusLine * StatusLine::parse(string statusLine) throw (runtime_error){
         message = statusLine.substr(codeStart+4);
     }
 
-    return new StatusLine(protocol, code, message);
+    return StatusLine(protocol, code, message);
 }

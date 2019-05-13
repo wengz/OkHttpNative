@@ -23,7 +23,7 @@
 #include "../../Response.h"
 #include "StatusLine.h"
 
-void Http1Codec::writeSocket (const void * buffer, int length){
+void Http1Codec::writeSocket (const void * buffer, int length) const{
 
     int bytes_left;
     int written_bytes;
@@ -32,7 +32,7 @@ void Http1Codec::writeSocket (const void * buffer, int length){
     ptr = (char *)buffer;
     bytes_left = length;
     while (bytes_left > 0){
-        written_bytes = write(socketFd, ptr, bytes_left);
+        written_bytes = write(connection->connectedSocket(), ptr, bytes_left);
         if (written_bytes <= 0){
             if (errno == EINTR){
                 written_bytes = 0;
@@ -63,8 +63,8 @@ void Http1Codec::writeRequest(const Headers & hds, const string & requestLine) {
     writeSocket("\r\n");
 }
 
-void Http1Codec::writeRequestHeaders(Request * req) {
-    writeRequest(req->getHeaders(), "POST /testpost HTTP/1.1");
+void Http1Codec::writeRequestHeaders(Request &req) {
+    writeRequest(req.getHeaders(), "POST /testpost HTTP/1.1");
 }
 
 Headers * Http1Codec::readHeaders() {
@@ -92,19 +92,17 @@ Headers * Http1Codec::readHeaders() {
 
 Response *  Http1Codec::readResponseHeaders(bool expectContinue) {
 
-    //fixme 异常时指针释放
-    StatusLine * statusLine = StatusLine::parse(readLine());
+    StatusLine statusLine = StatusLine::parse(readLine());
 
-    if (expectContinue && statusLine->code == StatusLine::HTTP_CONTINUE ){
+    if (expectContinue && statusLine.code == StatusLine::HTTP_CONTINUE ){
         return nullptr;
     }
 
     Response * response = new Response();
-    response->setProtocol(statusLine->protocol);
-    response->setCode(statusLine->code);
-    response->setMessage(statusLine->message);
-    response->setHeaders(readHeaders());
-    delete statusLine;
+    response->setProtocol(statusLine.protocol);
+    response->setCode(statusLine.code);
+    response->setMessage(statusLine.message);
+    response->setHeaders(*readHeaders());
 
     return response;
 }
@@ -155,30 +153,6 @@ string Http1Codec::readHeaderLine() {
     return line;
 }
 
-size_t Http1Codec::readLine2(int fd, void *vptr, size_t maxlen)
-{
-    size_t n, rc;
-    char c, *ptr;
-    ptr = (char*)vptr;
-    for(n = 1 ;n < maxlen; n++)
-    {
-        if( (rc = read(fd, &c, 1)) == 1)
-        {
-            *ptr++ = c;
-            if(c == '\n')
-                break;
-        }else if( rc == 0) {
-            *ptr = 0;
-            return (n-1);
-        }else{
-            return -1;
-        }
-    }
-    *ptr = 0;
-    return n;
-}
-
-
 string Http1Codec::readLine() {
     size_t  max_char = 1024;
     char * bufp = new char[max_char];
@@ -222,7 +196,7 @@ int Http1Codec::readn(void *vptr, size_t n) {
     ssize_t nread = 0;
     char * ptr = (char *) vptr;
     while (nleft > 0){
-        nread = read(socketFd, ptr, nleft);
+        nread = read(connection->connectedSocket(), ptr, nleft);
         if (-1 == nread){
             if (EINTR == errno){
                 nread = 0;
@@ -240,7 +214,7 @@ int Http1Codec::readn(void *vptr, size_t n) {
 
 ssize_t Http1Codec::recvPeek(void *buf, size_t len) {
     while (true){
-        int ret = recv(socketFd, buf, len, MSG_PEEK);
+        int ret = recv(connection->connectedSocket(), buf, len, MSG_PEEK);
         if (ret == -1 && errno == EINTR){
             //fixme 更详细的错误判断，抛出异常?
             continue;
@@ -253,19 +227,10 @@ Http1Codec::Http1Codec():transferChunked(false) {
 
 }
 
-
-void Http1Codec::openResponseBody() {
+Http1Codec::Http1Codec(shared_ptr<RealConnection> conn): connection(conn), transferChunked(false) {
 
 }
 
-
-Http1Codec::Http1Codec(Call *arg_call) {
-    call = arg_call;
-}
-
-Http1Codec::Http1Codec(int connectedSocket):transferChunked(false) {
-    socketFd = connectedSocket;
-}
 
 char * Http1Codec::readBytes(int &size) {
     int size_limit = 1024*1024;

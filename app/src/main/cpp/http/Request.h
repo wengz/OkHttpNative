@@ -19,6 +19,8 @@ public :
 
     class Builder;
 
+    Request(){}
+
     Request(Builder & builder);
 
     std::string getMethod();
@@ -27,13 +29,13 @@ public :
 
     HttpUrl getUrl();
 
-    RequestBody * getBody();
+    RequestBody getBody();
 
 private :
     std::string method;
     HttpUrl url;
     Headers headers;
-    RequestBody * body;
+    RequestBody body;
 
 };
 

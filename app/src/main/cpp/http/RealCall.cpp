@@ -6,48 +6,44 @@
 #include "internal/http/Http1Codec.h"
 #include "Response.h"
 #include "internal/http/HttpMethod.h"
+#include <memory>
 
-RealCall *  RealCall::newRealCall(HttpClient * client, Request * req){
+RealCall * RealCall::newRealCall(shared_ptr<HttpClient> client, Request req){
     return new RealCall(client, req);
 }
 
-Request * RealCall::getRequest() {
+Request RealCall::getRequest() {
     return originRequest;
 }
 
-Response * RealCall::execute(){
+unique_ptr<Response> RealCall::execute(){
     connection->connectServer();
-    codec = connection->newStream();
+    codec = shared_ptr<Http1Codec>(RealConnection::newStream(connection));
     codec->writeRequestHeaders(originRequest);
-    Response * response = nullptr;
 
-    if (HttpMethod::permitsRequestBody(originRequest->getMethod()) && originRequest->getBody() != nullptr ){
-        originRequest->getBody()->writeTo(codec);
+    unique_ptr<Response> response;
+
+    if (HttpMethod::permitsRequestBody(originRequest.getMethod()) ){
+        originRequest.getBody().writeTo(*codec);
     }
 
-    if (response == nullptr){
-        response = codec->readResponseHeaders(false);
+    if (response){
+        response = unique_ptr<Response>(codec->readResponseHeaders(false));
     }
     response->setResponseBody(new ResponseBody(codec));
     return response;
+}
+
+RealCall::RealCall(shared_ptr<HttpClient> client, Request req)
+        :client(client), originRequest(req){
+    connection = shared_ptr<RealConnection>(new RealConnection(http_1_1, req.getUrl().getHost(), req.getUrl().getPort()));
 }
 
 void RealCall::cancel() {
 
 }
 
-RealCall::RealCall(HttpClient *client, Request *req)
-        :client(client), originRequest(req){
-    connection = new RealConnection(http_1_1, req->getUrl().getHost(), req->getUrl().getPort());
-}
-
-
-void RealCall::releaseResource() {
-    delete codec;
-    delete connection;
-}
-
 RealCall::~RealCall() {
-    releaseResource();
+
 };
 

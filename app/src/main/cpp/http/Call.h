@@ -5,6 +5,8 @@
 #ifndef OKHTTPNATIVE_CALL_H
 #define OKHTTPNATIVE_CALL_H
 
+#include <memory>
+
 class Request;
 class Response;
 
@@ -12,11 +14,8 @@ class Response;
 class Call {
 
 public :
-    virtual Request * getRequest() = 0;
 
-    virtual Response * execute() = 0;
-
-    virtual void cancel() = 0;
+    virtual std::unique_ptr<Response> execute() = 0;
 
 };
 

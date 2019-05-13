@@ -15,17 +15,15 @@ class ResponseBody {
 
 public :
 
-    ResponseBody (Http1Codec * http1Codec):http1Codec(http1Codec){
+    ResponseBody (shared_ptr<Http1Codec> http1Codec):http1Codec(http1Codec){
 
     };
 
     virtual char * bytes(long * contentLength);
 
-    ~ResponseBody();
-
 private :
 
-    Http1Codec * http1Codec;
+    shared_ptr<Http1Codec> http1Codec;
 };
 
 

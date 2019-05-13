@@ -36,7 +36,7 @@ public :
         writeTimeout = b.writeTimeout;
     }
 
-    Call * newCall(Request * request);
+    static Call * newCall(shared_ptr<HttpClient> client, Request request);
 
 protected :
     int callTimeout;

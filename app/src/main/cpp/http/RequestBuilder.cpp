@@ -12,10 +12,9 @@ Request Request::Builder::build() {
 Request::Builder::Builder() {
     method = "GET";
     headers.add("Connection", "Keep-Alive");
-    //headers.add("Accept-Encoding", "gzip");
 }
 
-Request::Builder & Request::Builder::setUrl(HttpUrl urlArg) {
+Request::Builder & Request::Builder::setUrl(HttpUrl & urlArg) {
     url = urlArg;
     headers.add("Host", urlArg.getHost());
     return * this;
@@ -34,15 +33,16 @@ HttpUrl Request::Builder::getUrl() {
     return url;
 }
 
-Request::Builder &Request::Builder::post(RequestBody *rb) {
+Request::Builder &Request::Builder::post(RequestBody &rb) {
     return setMethod("post", rb);
 }
 
-Request::Builder &Request::Builder::setMethod(string method, RequestBody *rb) {
+Request::Builder &Request::Builder::setMethod(string method, RequestBody & rb) {
     this->method = method;
     this->body = rb;
-    headers.add("content-type", "text/plain");
-    headers.add("content-length", "3");
+    //带消息体的方法添加特别的头信息
+    //headers.add("content-type", "text/plain");
+    //headers.add("content-length", "3");
     return * this;
 }
 
@@ -50,6 +50,6 @@ string Request::Builder::getMethod() {
     return method;
 }
 
-RequestBody *Request::Builder::getBody() {
+RequestBody Request::Builder::getBody() {
     return body;
 }

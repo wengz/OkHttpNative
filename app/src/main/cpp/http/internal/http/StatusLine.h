@@ -20,9 +20,9 @@ public :
     static const int HTTP_PERM_REDIRECT;
     static const int HTTP_CONTINUE;
 
-    static StatusLine * parse(string statusLine) throw (runtime_error);
+    static StatusLine parse(const string & statusLine) throw (runtime_error);
 
-    StatusLine(Protocol protocol, int code, std::string message);
+    StatusLine(Protocol protocol, int code, std::string & message);
 
     Protocol protocol;
     int code;

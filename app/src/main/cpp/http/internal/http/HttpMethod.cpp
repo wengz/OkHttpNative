@@ -5,7 +5,7 @@
 #include "HttpMethod.h"
 
 bool HttpMethod::permitsRequestBody(const string & method) {
-    if (method.compare("GET") == 0 || method.compare("HEAD") == 0){
+    if ( method == "GET" || method == "HEAD" ){
         return false;
     }
     return true;

@@ -12,28 +12,26 @@
 
 class Response;
 
-class RealCall :  public Call{
+class RealCall : public Call{
 
 public:
-    static RealCall * newRealCall(HttpClient * client, Request  * req);
+    static RealCall * newRealCall(shared_ptr<HttpClient> client, Request req);
 
-    Request * getRequest();
+    Request getRequest();
 
-    Response * execute();
+    unique_ptr<Response> execute();
 
     void cancel();
-
-    void releaseResource();
 
     virtual ~RealCall();
 
 private:
-    HttpClient * client;
-    Request * originRequest;
-    RealConnection * connection;
-    Http1Codec * codec;
+    shared_ptr<HttpClient> client;
+    Request originRequest;
+    shared_ptr<RealConnection> connection;
+    shared_ptr<Http1Codec> codec;
 
-    RealCall(HttpClient * client, Request * req);
+    RealCall(shared_ptr<HttpClient> client, Request req);
 };
 
 

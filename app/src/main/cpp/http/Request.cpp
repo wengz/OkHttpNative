@@ -21,7 +21,7 @@ HttpUrl Request::getUrl() {
     return url;
 }
 
-RequestBody *Request::getBody() {
+RequestBody Request::getBody() {
     return body;
 }
 

@@ -7,30 +7,36 @@
 #include "http/MediaType.h"
 #include "http/RequestBody.h"
 #include "http/Response.h"
+#include "http/Request.h"
+#include "http/RequestBuilder.h"
 
 using namespace std;
 
 void testOkHttpNative (){
-    HttpClient client;
-    string url("http://10.112.19.17:8080");
+
+    std::shared_ptr<HttpClient> s_client(new HttpClient);
+    string url("http://www.baidu.com");
     Request request = Request::Builder().setUrl(url).build();
-    Response  * response = client.newCall(&request)->execute();
+    unique_ptr<Response> response = HttpClient::newCall(s_client, request)->execute();
     long contentLength;
-    char * content = response->getResponseBody()->bytes(&contentLength);
-    delete content;
+
+    unique_ptr<char[]> content(response->getResponseBody()->bytes(&contentLength));
+
+//    char * content = response->getResponseBody()->bytes(&contentLength);
+//    delete content;
 }
 
 void testPost (){
-    MediaType mediaType = MediaType::get("application/json; charset=utf-8");
-    HttpClient client;
-    char * reqBodyContent = "abc";
-    RequestBody requetBody = RequestBody::create(mediaType, reqBodyContent, 0, 3);
-    string url("http://10.112.19.17:8080");
-    Request request = Request::Builder().setUrl(url).post(&requetBody).build();
-    Response  * response = client.newCall(&request)->execute();
-    long contentLength;
-    char * content = response->getResponseBody()->bytes(&contentLength);
-    delete content;
+//    MediaType mediaType = MediaType::get("application/json; charset=utf-8");
+//    HttpClient client;
+//    char * reqBodyContent = "abc";
+//    RequestBody requetBody = RequestBody::create(mediaType, reqBodyContent, 0, 3);
+//    string url("http://10.112.19.17:8080");
+//    Request request = Request::Builder().setUrl(url).post(&requetBody).build();
+//    Response  * response = client.newCall(&request)->execute();
+//    long contentLength;
+//    char * content = response->getResponseBody()->bytes(&contentLength);
+//    delete content;
 }
 
 extern "C" JNIEXPORT jstring
@@ -103,6 +109,7 @@ JNICALL
 Java_com_wengzc_okhttpnative_MainActivity_trigerJNI(
         JNIEnv *env,
         jobject /* this */) {
-    testHttpUrl();
+
+    testOkHttpNative();
 }
 

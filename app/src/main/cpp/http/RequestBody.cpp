@@ -19,15 +19,13 @@ long RequestBody::getContentLength() {
     return contentLength;
 }
 
-void RequestBody::writeTo(void *target) {
-    Http1Codec * codec = static_cast<Http1Codec *>(target);
-    codec->writeSocket(content, getContentLength());
-
+void RequestBody::writeTo(const Http1Codec & codec) {
+    codec.writeSocket(content, getContentLength());
 }
 
 RequestBody::RequestBody(const MediaType &contentType, const char *content, int offset, int byteCount)
     :contentType(contentType), contentLength(byteCount){
-    this->content = static_cast<char *>(malloc(byteCount));
+    this->content = new char[byteCount];
     memcpy(this->content, content+offset, byteCount);
 }
 
@@ -38,4 +36,19 @@ RequestBody::~RequestBody() {
 void RequestBody::print() const {
     //string tempContent(content);
     //LogUtil::debug(tempContent);
+}
+
+RequestBody::RequestBody(const RequestBody & old) {
+    contentType = old.contentType;
+    contentLength = old.contentLength;
+    this->content = new char[contentLength];
+    memcpy(this->content, old.content, contentLength);
+}
+
+RequestBody &RequestBody::operator=(const RequestBody &rhs) {
+    contentType = rhs.contentType;
+    contentLength = rhs.contentLength;
+    this->content = new char[contentLength];
+    memcpy(this->content, rhs.content, contentLength);
+    return *this;
 }

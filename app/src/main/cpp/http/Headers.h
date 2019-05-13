@@ -45,17 +45,22 @@ public :
     };
     //--构造器--end
 
-
     Headers(Builder & builder);
 
     Headers (){}
 
-    Builder & newBuilder  (){
+    Headers(const Headers & rhs);
+
+    Headers & operator=(const Headers & rhs);
+
+    virtual ~Headers();
+
+    Builder * newBuilder  (){
         Builder * res = new Builder;
         for (int i = 0; i < nameAndValuesSize; i++){
             res->nameAndValues.push_back(*(nameAndValues+i));
         }
-        return *res;
+        return res;
     }
 
     size_t size() const{

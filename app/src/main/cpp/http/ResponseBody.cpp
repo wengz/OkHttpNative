@@ -6,10 +6,6 @@
 
 #include "internal/http/Http1Codec.h"
 
-ResponseBody::~ResponseBody(){
-
-}
-
 char * ResponseBody::bytes(long *contentLength) {
     char * buff = http1Codec->responseBodyBytes(contentLength);
     return buff;
