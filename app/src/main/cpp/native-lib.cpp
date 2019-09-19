@@ -115,6 +115,22 @@ Java_com_wengzc_okhttpnative_MainActivity_trigerJNI(
         JNIEnv *env,
         jobject /* this */) {
 
-    testOkHttpNative();
+    //testOkHttpNative();
+
+
+//    testOkHttpNativestd::string * testStr = new std::string("hello ptr");
+//    LogUtil::debug(* testStr);
+//
+//    delete testStr;
+//
+//    if (testStr == nullptr){
+//        LogUtil::debug("ptr to testStr is null now");
+//    }
+//
+//    if (nullptr == 0){
+//        LogUtil::debug("nullptr == 0");
+//    }
+//
+//    LogUtil::debug(* testStr);
 }
 
