@@ -225,7 +225,6 @@ HttpUrl::Builder & HttpUrl::Builder::parse(HttpUrl * base, string input) {
 
         pos += slash_count;
 
-        authority:
         while (true){
             int componentDelimiterOffset = delimiterOffset(input, pos, limit, "@/\\?#");
             int c = componentDelimiterOffset != limit ?
@@ -279,6 +278,8 @@ HttpUrl::Builder & HttpUrl::Builder::parse(HttpUrl * base, string input) {
                     pos = componentDelimiterOffset;
                     goto authority;
             }
+
+            authority: break;
         }
 
     }else{

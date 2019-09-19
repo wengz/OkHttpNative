@@ -6,10 +6,12 @@
 #include "Request.h"
 
 Request Request::Builder::build() {
+    LogUtil::debug("Request::Builder::build()");
     return Request(*this);
 }
 
 Request::Builder::Builder() {
+    LogUtil::debug("Request::Builder::Builder()");
     method = "GET";
     headers.add("Connection", "Keep-Alive");
 }
@@ -21,15 +23,18 @@ Request::Builder & Request::Builder::setUrl(HttpUrl & urlArg) {
 }
 
 Request::Builder &Request::Builder::setUrl(string &url) {
+    LogUtil::debug("Request::Builder::setUrl");
     HttpUrl retUrl = HttpUrl::get(url);
     return setUrl(retUrl);
 }
 
 Headers::Builder &Request::Builder::getHeaders() {
+    LogUtil::debug("Request::Builder::getHeaders()");
     return headers;
 }
 
 HttpUrl Request::Builder::getUrl() {
+    LogUtil::debug("Request::Builder::getUrl()");
     return url;
 }
 
@@ -47,9 +52,11 @@ Request::Builder &Request::Builder::setMethod(string method, RequestBody & rb) {
 }
 
 string Request::Builder::getMethod() {
+    LogUtil::debug("Request::Builder::getMethod()");
     return method;
 }
 
 RequestBody Request::Builder::getBody() {
+    LogUtil::debug("Request::Builder::getBody()");
     return body;
 }

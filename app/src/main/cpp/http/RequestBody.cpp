@@ -39,10 +39,14 @@ void RequestBody::print() const {
 }
 
 RequestBody::RequestBody(const RequestBody & old) {
+    //LogUtil::debug("RequestBody::RequestBody(const RequestBody & old) -- start");
+    //LogUtil::debug( std::string("old.contentLength >>> ").append(std::to_string(old.contentLength)));
+
     contentType = old.contentType;
     contentLength = old.contentLength;
     this->content = new char[contentLength];
     memcpy(this->content, old.content, contentLength);
+    //LogUtil::debug("RequestBody::RequestBody(const RequestBody & old) -- end");
 }
 
 RequestBody &RequestBody::operator=(const RequestBody &rhs) {

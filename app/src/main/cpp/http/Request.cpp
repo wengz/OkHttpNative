@@ -14,7 +14,8 @@ Headers & Request::getHeaders() {
 }
 
 Request::Request(Request::Builder & builder)
-        : headers(builder.getHeaders()), url(builder.getUrl()) , method(builder.getMethod()), body(builder.getBody()){
+        : headers(builder.getHeaders()), url(builder.getUrl()) , method(builder.getMethod()), body(builder.getBody()) {
+    LogUtil::debug("Request::Request(Request::Builder & builder)");
 }
 
 HttpUrl Request::getUrl() {

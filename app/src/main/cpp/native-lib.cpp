@@ -14,15 +14,20 @@ using namespace std;
 
 void testOkHttpNative (){
 
+    LogUtil::debug("1042 testOkHttpNative");
+
     std::shared_ptr<HttpClient> s_client(new HttpClient);
     string url("http://www.baidu.com");
     Request request = Request::Builder().setUrl(url).build();
+    LogUtil::debug("build Request");
     unique_ptr<Response> response = HttpClient::newCall(s_client, request)->execute();
+    LogUtil::debug("get response");
     long contentLength;
 
-    unique_ptr<char[]> content(response->getResponseBody()->bytes(&contentLength));
+    //unique_ptr<char[]> content(response->getResponseBody()->bytes(&contentLength));
 
-//    char * content = response->getResponseBody()->bytes(&contentLength);
+    char * content = response->getResponseBody()->bytes(&contentLength);
+    LogUtil::debug(string(content));
 //    delete content;
 }
 

@@ -17,9 +17,17 @@ Request RealCall::getRequest() {
 }
 
 unique_ptr<Response> RealCall::execute(){
+    LogUtil::debug("RealCall::execute() -- start");
+
     connection->connectServer();
+
+    LogUtil::debug("connection->connectServer() finish");
+
     codec = shared_ptr<Http1Codec>(RealConnection::newStream(connection));
+    LogUtil::debug("codec created");
+
     codec->writeRequestHeaders(originRequest);
+    LogUtil::debug("codec->writeRequestHeaders(originRequest)");
 
     unique_ptr<Response> response;
 
@@ -27,10 +35,11 @@ unique_ptr<Response> RealCall::execute(){
         originRequest.getBody().writeTo(*codec);
     }
 
-    if (response){
-        response = unique_ptr<Response>(codec->readResponseHeaders(false));
-    }
+    response = unique_ptr<Response>(codec->readResponseHeaders(false));
+    LogUtil::debug("readResponseHeaders finish");
+
     response->setResponseBody(new ResponseBody(codec));
+    LogUtil::debug("RealCall::execute() -- end");
     return response;
 }
 

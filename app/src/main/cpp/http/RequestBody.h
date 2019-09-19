@@ -15,7 +15,7 @@ public :
 
     static RequestBody create(const MediaType & contentType, const char * content, int offset, int byteCount );
 
-    RequestBody(){}
+    RequestBody() : content(nullptr), contentLength(0) {}
 
     virtual MediaType getContentType();
 

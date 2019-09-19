@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               trigerJNI();
+                trigerJNI();
+                //testOkHttp();
             }
+
         });
     }
 
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
-                            .url("http://www.baidu.com")
+                            .url("https://www.baidu.com")
                             .build();
 
                     Response response = client.newCall(request).execute();
