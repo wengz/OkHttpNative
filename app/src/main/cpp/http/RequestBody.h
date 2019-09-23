@@ -39,5 +39,4 @@ private :
     int contentLength;
 };
 
-
 #endif //OKHTTPNATIVE_REQUESTBODY_H
